@@ -496,8 +496,8 @@ public class RulerView extends View {
     }
 
     private void drawBg(Canvas canvas) {
+        bgRect.set(0, 0, width, height);
         if (isBgRoundRect) {
-            bgRect.set(0, 0, width, height);
             canvas.drawRoundRect(bgRect, 20, 20, bgPaint);
         } else {
             canvas.drawRect(bgRect, bgPaint);
