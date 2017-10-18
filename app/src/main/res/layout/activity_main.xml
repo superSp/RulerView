@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:lsp="http://schemas.android.com/apk/res-auto"
+    android:background="#000000"
+    android:layout_height="match_parent"
+    tools:context="rulerview.lsp.com.rulerview.MainActivity">
+
+   <com.lsp.RulerView
+       lsp:scaleCount="10"
+       lsp:rulerHeight="50dp"
+       lsp:rulerToResultgap="30dp"
+       lsp:scaleGap="10dp"
+       lsp:minScale="0"
+       lsp:firstScale="40"
+       lsp:maxScale="100"
+       lsp:bgColor="#fcfffc"
+       lsp:smallScaleColor="#aaaaaa"
+       lsp:midScaleColor="#999999"
+       lsp:largeScaleColor="#50b586"
+       lsp:scaleNumColor="#666666"
+       lsp:resultNumColor="#50b586"
+       lsp:unit="kg"
+       lsp:unitColor="#50b586"
+       lsp:smallScaleStroke="2dp"
+       lsp:midScaleStroke="3dp"
+       lsp:largeScaleStroke="5dp"
+       lsp:resultNumTextSize="20sp"
+       lsp:scaleNumTextSize="16sp"
+       lsp:unitTextSize="10sp"
+       lsp:showScaleResult="true"
+       lsp:isBgRoundRect="true"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_margin="10dp" />
+
+</FrameLayout>
