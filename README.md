@@ -2,6 +2,9 @@
 
 >compile 'com.github.superSp:RulerView:v1.2'
 
+# 实现思路以及流程
+[我的简书地址](http://www.jianshu.com/p/baf143364e04)
+
 # 演示
 
 ![演示gif](https://github.com/superSp/RulerView/blob/master/RulerViewGif.gif)
