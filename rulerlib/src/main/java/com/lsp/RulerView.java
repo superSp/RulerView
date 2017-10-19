@@ -509,4 +509,117 @@ public class RulerView extends View {
         void onEndResult(String result);
         void onScrollResult(String result);
     }
+    public void setRulerHeight(int rulerHeight) {
+        this.rulerHeight = rulerHeight;
+        invalidate();
+    }
+
+    public void setRulerToResultgap(int rulerToResultgap) {
+        this.rulerToResultgap = rulerToResultgap;
+        invalidate();
+    }
+
+    public void setScaleCount(int scaleCount) {
+        this.scaleCount = scaleCount;
+        invalidate();
+    }
+
+    public void setScaleGap(int scaleGap) {
+        this.scaleGap = scaleGap;
+        invalidate();
+    }
+
+    public void setMinScale(int minScale) {
+        this.minScale = minScale;
+        invalidate();
+    }
+
+    public void setFirstScale(float firstScale) {
+        this.firstScale = firstScale;
+        invalidate();
+    }
+
+    public void setMaxScale(int maxScale) {
+        this.maxScale = maxScale;
+        invalidate();
+    }
+
+    public void setBgColor(int bgColor) {
+        this.bgColor = bgColor;
+        invalidate();
+    }
+
+    public void setSmallScaleColor(int smallScaleColor) {
+        this.smallScaleColor = smallScaleColor;
+        invalidate();
+    }
+
+    public void setMidScaleColor(int midScaleColor) {
+        this.midScaleColor = midScaleColor;
+        invalidate();
+    }
+
+    public void setLargeScaleColor(int largeScaleColor) {
+        this.largeScaleColor = largeScaleColor;
+    }
+
+    public void setScaleNumColor(int scaleNumColor) {
+        this.scaleNumColor = scaleNumColor;
+        invalidate();
+    }
+
+    public void setResultNumColor(int resultNumColor) {
+        this.resultNumColor = resultNumColor;
+        invalidate();
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+        invalidate();
+    }
+
+    public void setUnitColor(int unitColor) {
+        this.unitColor = unitColor;
+        invalidate();
+    }
+
+    public void setSmallScaleStroke(int smallScaleStroke) {
+        this.smallScaleStroke = smallScaleStroke;
+        invalidate();
+    }
+
+    public void setMidScaleStroke(int midScaleStroke) {
+        this.midScaleStroke = midScaleStroke;
+        invalidate();
+    }
+
+    public void setLargeScaleStroke(int largeScaleStroke) {
+        this.largeScaleStroke = largeScaleStroke;
+        invalidate();
+    }
+
+    public void setResultNumTextSize(int resultNumTextSize) {
+        this.resultNumTextSize = resultNumTextSize;
+        invalidate();
+    }
+
+    public void setScaleNumTextSize(int scaleNumTextSize) {
+        this.scaleNumTextSize = scaleNumTextSize;
+        invalidate();
+    }
+
+    public void setUnitTextSize(int unitTextSize) {
+        this.unitTextSize = unitTextSize;
+        invalidate();
+    }
+
+    public void setShowScaleResult(boolean showScaleResult) {
+        this.showScaleResult = showScaleResult;
+        invalidate();
+    }
+
+    public void setIsBgRoundRect(boolean bgRoundRect) {
+        isBgRoundRect = bgRoundRect;
+        invalidate();
+    }
 }
