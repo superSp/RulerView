@@ -1,6 +1,6 @@
 # 使用
 
->compile 'com.github.superSp:RulerView:v1.2
+>compile 'com.github.superSp:RulerView:v1.2'
 
 # 演示
 
