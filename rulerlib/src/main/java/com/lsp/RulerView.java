@@ -455,6 +455,7 @@ public class RulerView extends View {
         if (onChooseResulterListener != null) {
             onChooseResulterListener.onScrollResult(resultText);
         }
+        //只绘制当前屏幕可见刻度
         while (rulerRight < width) {
             if (num1 % scaleCount == 0) {
                 if ((moveX >= 0 && rulerRight < moveX - scaleGap) || width / 2 - rulerRight <= getWhichScalMovex(maxScale + 1) - moveX) {   //去除左右边界
