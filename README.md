@@ -1,6 +1,18 @@
 # 使用
 
->compile 'com.github.superSp:RulerView:v1.2'
+> 在根build.gradle 中添加
+````
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+
+    }
+}
+````
+>在module的build.gradle中添加
+
+`compile 'com.github.superSp:RulerView:v1.2'`
 
 # 实现思路以及流程
 [我的简书地址](http://www.jianshu.com/p/baf143364e04)
