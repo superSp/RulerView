@@ -20,6 +20,7 @@ allprojects {
 # 演示
 
 ![演示gif](https://github.com/superSp/RulerView/blob/master/RulerViewGif.gif)
+![演示gif2](https://github.com/superSp/RulerView/blob/master/RulerViewGif2.gif)
 
 # 支持设置的属性
 ````
