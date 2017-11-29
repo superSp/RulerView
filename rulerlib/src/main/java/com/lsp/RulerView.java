@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -128,6 +129,14 @@ public class RulerView extends View {
      * 结果回调
      */
     private OnChooseResulterListener onChooseResulterListener;
+    /**
+     * 滑动选择刻度
+     */
+    private float computeScale = -1;
+    /**
+     * 当前刻度
+     */
+    public float currentScale = firstScale;
     private ValueAnimator valueAnimator;
     private VelocityTracker velocityTracker = VelocityTracker.obtain();
     private String resultText = String.valueOf(firstScale);
@@ -394,7 +403,6 @@ public class RulerView extends View {
     }
 
     private float getWhichScalMovex(float scale) {
-
         return width / 2 - scaleGap * scaleCount * (scale - minScale);
     }
 
@@ -405,30 +413,15 @@ public class RulerView extends View {
         float num2;
 
         if (firstScale != -1) {   //第一次进来的时候计算出默认刻度对应的假设滑动的距离moveX
-            moveX = getWhichScalMovex(firstScale);
+            moveX = getWhichScalMovex(firstScale);          //如果设置了默认滑动位置，计算出需要滑动的距离
             lastMoveX = moveX;
-            firstScale = -1;
+            firstScale = -1;                                //将结果置为-1，下次不再计算初始位置
         }
 
-        num1 = -(int)(moveX / scaleGap);
-        num2 = (moveX % scaleGap);
-
-        canvas.save();
-
-        rulerRight = 0;
-
-        if (isUp) {   //这部分代码主要是计算手指抬起时，惯性滑动结束时，刻度需要停留的位置
-            num2 = ((moveX - width / 2 % scaleGap) % scaleGap);
-            if (num2 <= 0) {
-                num2 = scaleGap - Math.abs(num2);
-            }
-            leftScroll = (int) Math.abs(num2);
-            rightScroll = (int) (scaleGap - Math.abs(num2));
-
-            float moveX2 = num2 <= scaleGap / 2 ? moveX - leftScroll : moveX + rightScroll;
-
+        if (computeScale != -1) {//弹性滑动到目标刻度
+            lastMoveX = moveX;
             if (valueAnimator != null && !valueAnimator.isRunning()) {
-                valueAnimator = ValueAnimator.ofFloat(moveX, moveX2);
+                valueAnimator = ValueAnimator.ofFloat(getWhichScalMovex(currentScale), getWhichScalMovex(computeScale));
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -438,6 +431,46 @@ public class RulerView extends View {
                     }
                 });
                 valueAnimator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        //这里是滑动结束时候回调给使用者的结果值
+                        computeScale = -1;
+                    }
+                });
+                valueAnimator.setDuration(Math.abs((long) ((getWhichScalMovex(computeScale) - getWhichScalMovex(currentScale)) / 100)));
+                valueAnimator.start();
+            }
+        }
+
+        num1 = -(int) (moveX / scaleGap);                   //滑动刻度的整数部分
+        num2 = (moveX % scaleGap);                         //滑动刻度的小数部分
+
+        canvas.save();                                      //保存当前画布
+
+        rulerRight = 0;                                    //准备开始绘制当前屏幕,从最左面开始
+
+        if (isUp) {   //这部分代码主要是计算手指抬起时，惯性滑动结束时，刻度需要停留的位置
+            num2 = ((moveX - width / 2 % scaleGap) % scaleGap);     //计算滑动位置距离整点刻度的小数部分距离
+            if (num2 <= 0) {
+                num2 = scaleGap - Math.abs(num2);
+            }
+            leftScroll = (int) Math.abs(num2);                        //当前滑动位置距离左边整点刻度的距离
+            rightScroll = (int) (scaleGap - Math.abs(num2));         //当前滑动位置距离右边整点刻度的距离
+
+            float moveX2 = num2 <= scaleGap / 2 ? moveX - leftScroll : moveX + rightScroll; //最终计算出当前位置到整点刻度位置需要滑动的距离
+
+            if (valueAnimator != null && !valueAnimator.isRunning()) {      //手指抬起，并且当前没有惯性滑动在进行，创建一个惯性滑动
+                valueAnimator = ValueAnimator.ofFloat(moveX, moveX2);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        moveX = (float) animation.getAnimatedValue();            //不断滑动去更新新的位置
+                        lastMoveX = moveX;
+                        invalidate();
+                    }
+                });
+                valueAnimator.addListener(new AnimatorListenerAdapter() {       //增加一个监听，用来返回给使用者滑动结束后的最终结果刻度值
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
@@ -452,37 +485,45 @@ public class RulerView extends View {
                 isUp = false;
             }
 
-            num1 = (int) -(moveX / scaleGap);
+            num1 = (int) -(moveX / scaleGap);                //重新计算当前滑动位置的整数以及小数位置
             num2 = (moveX % scaleGap);
         }
-        canvas.translate(num2, 0);    //不加该偏移的话，滑动时刻度不会落在0~1之间只会落在整数上面,其实这个都能设置一种模式了，毕竟初衷就是指针不会落在小数上面
-        //这里是滑动时候不断回调给使用者的结果值
-        resultText = String.valueOf(new WeakReference<>(new BigDecimal((width / 2 - moveX) / (scaleGap * scaleCount))).get().setScale(1, BigDecimal.ROUND_HALF_UP).floatValue() + minScale);
-        if (onChooseResulterListener != null) {
-            onChooseResulterListener.onScrollResult(resultText);
-        }
-        //绘制当前屏幕可见刻度,不需要裁剪屏幕,while循环只会执行·屏幕宽度/刻度宽度·次
-        while (rulerRight < width) {
-            if (num1 % scaleCount == 0) {
-                if ((moveX >= 0 && rulerRight < moveX - scaleGap) || width / 2 - rulerRight <= getWhichScalMovex(maxScale + 1) - moveX) {   //去除左右边界
 
+
+        canvas.translate(num2, 0);    //不加该偏移的话，滑动时刻度不会落在0~1之间只会落在整数上面,其实这个都能设置一种模式了，毕竟初衷就是指针不会落在小数上面
+
+        //这里是滑动时候不断回调给使用者的结果值
+        currentScale = new WeakReference<>(new BigDecimal((width / 2 - moveX) / (scaleGap * scaleCount)+minScale)).get().setScale(1, BigDecimal.ROUND_HALF_UP).floatValue() ;
+        resultText = String.valueOf(currentScale);
+
+
+        if (onChooseResulterListener != null) {
+            onChooseResulterListener.onScrollResult(resultText); //接口不断回调给使用者结果值
+        }
+        //绘制当前屏幕可见刻度,不需要裁剪屏幕,while循环只会执行·屏幕宽度/刻度宽度·次,大部分的绘制都是if(curDis<width)这样子内存暂用相对来说会比较高。。
+        while (rulerRight < width) {
+            if (num1 % scaleCount == 0) {    //绘制整点刻度以及文字
+                if ((moveX >= 0 && rulerRight < moveX - scaleGap) || width / 2 - rulerRight <= getWhichScalMovex(maxScale + 1) - moveX) {
+                    //当滑动出范围的话，不绘制，去除左右边界
                 } else {
+                    //绘制刻度，绘制刻度数字
                     canvas.drawLine(0, 0, 0, midScaleHeight, midScalePaint);
                     scaleNumPaint.getTextBounds(num1 / scaleGap + minScale + "", 0, (num1 / scaleGap + minScale + "").length(), scaleNumRect);
                     canvas.drawText(num1 / scaleCount + minScale + "", -scaleNumRect.width() / 2, lagScaleHeight +
                             (rulerHeight - lagScaleHeight) / 2 + scaleNumRect.height(), scaleNumPaint);
                 }
 
-            } else {
-                if ((moveX >= 0 && rulerRight < moveX) || width / 2 - rulerRight < getWhichScalMovex(maxScale) - moveX) {   //去除左右边界
-
+            } else {   //绘制小数刻度
+                if ((moveX >= 0 && rulerRight < moveX) || width / 2 - rulerRight < getWhichScalMovex(maxScale) - moveX) {
+                    //当滑动出范围的话，不绘制，去除左右边界
                 } else {
+                    //绘制小数刻度
                     canvas.drawLine(0, 0, 0, smallScaleHeight, smallScalePaint);
                 }
             }
-            ++num1;
-            rulerRight += scaleGap;
-            canvas.translate(scaleGap, 0);
+            ++num1;  //刻度加1
+            rulerRight += scaleGap;  //绘制屏幕的距离在原有基础上+1个刻度间距
+            canvas.translate(scaleGap, 0); //移动画布到下一个刻度
         }
 
         canvas.restore();
@@ -493,15 +534,15 @@ public class RulerView extends View {
 
     //绘制上面的结果 结果值+单位
     private void drawResultText(Canvas canvas, String resultText) {
-        if (!showScaleResult) {
+        if (!showScaleResult) {   //判断用户是否设置需要显示当前刻度值，如果否则取消绘制
             return;
         }
-        canvas.translate(0, -resultNumRect.height() - rulerToResultgap / 2);
+        canvas.translate(0, -resultNumRect.height() - rulerToResultgap / 2);  //移动画布到正确的位置来绘制结果值
         resultNumPaint.getTextBounds(resultText, 0, resultText.length(), resultNumRect);
-        canvas.drawText(resultText, width / 2 - resultNumRect.width() / 2, resultNumRect.height(),
+        canvas.drawText(resultText, width / 2 - resultNumRect.width() / 2, resultNumRect.height(), //绘制当前刻度结果值
                 resultNumPaint);
         resultNumRight = width / 2 + resultNumRect.width() / 2 + 10;
-        canvas.drawText(unit, resultNumRight, kgRect.height() + 2, kgPaint);
+        canvas.drawText(unit, resultNumRight, kgRect.height() + 2, kgPaint);            //在当前刻度结果值的又面10px的位置绘制单位
     }
 
     private void drawBg(Canvas canvas) {
@@ -513,10 +554,23 @@ public class RulerView extends View {
         }
     }
 
+    public void computeScrollTo(float scale) {
+
+        if (scale < minScale || scale > maxScale) {
+            return;
+        }
+
+        computeScale = scale;
+        invalidate();
+
+    }
+
     public interface OnChooseResulterListener {
         void onEndResult(String result);
+
         void onScrollResult(String result);
     }
+
     public void setRulerHeight(int rulerHeight) {
         this.rulerHeight = rulerHeight;
         invalidate();

@@ -4,51 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context="rulerview.lsp.com.rulerview.MainActivity">
-    <!--&lt;!&ndash;数字和单位&ndash;&gt;-->
-    <!--<yanzhikai.ruler.KgNumberLayout-->
-        <!--android:id="@+id/knl"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@+id/br"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--lsp:kgTextSize="20sp"-->
-        <!--lsp:scaleTextSize="50sp" />-->
 
-    <!--&lt;!&ndash;尺子&ndash;&gt;-->
-    <!--<yanzhikai.ruler.BooheeRuler-->
-        <!--android:id="@+id/br"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:layout_margin="20dp"-->
-        <!--android:background="@color/colorDirtyWithe"-->
-        <!--lsp:bigScaleLength="40dp"-->
-        <!--lsp:bigScaleWidth="2.5dp"-->
-        <!--lsp:currentScale="50"-->
-        <!--lsp:cursorHeight="45dp"-->
-        <!--lsp:maxScale="100"-->
-        <!--lsp:minScale="0"-->
-        <!--lsp:numberTextSize="22sp"-->
-        <!--lsp:scaleInterval="11.5dp"-->
-        <!--lsp:smallScaleLength="20dp"-->
-        <!--lsp:smallScaleWidth="1.5dp"-->
-        <!--lsp:textMarginTop="80dp" />-->
-
-    <com.lsp.RulerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="computeScroll"
+            android:text="目的刻度" />
+    </LinearLayout>
+
+
+    <com.lsp.RulerView
+        android:id="@+id/rulerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         lsp:bgColor="#fcfffc"
-        lsp:firstScale="50000"
+        lsp:firstScale="520"
         lsp:isBgRoundRect="true"
         lsp:largeScaleColor="#50b586"
         lsp:largeScaleStroke="5dp"
-        lsp:maxScale="1000000"
+        lsp:minScale="-100"
+        lsp:maxScale="1000"
         lsp:midScaleColor="#999999"
         lsp:midScaleStroke="3dp"
-        lsp:minScale="0"
         lsp:resultNumColor="#50b586"
         lsp:resultNumTextSize="20sp"
         lsp:rulerHeight="50dp"
