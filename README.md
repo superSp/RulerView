@@ -12,7 +12,7 @@ allprojects {
 ````
 >在module的build.gradle中添加
 
-`compile 'com.github.superSp:RulerView:v1.2'`
+`compile 'com.github.superSp:RulerView:v1.3'`
 
 # 实现思路以及流程
 [我的简书地址](http://www.jianshu.com/p/baf143364e04)
@@ -21,8 +21,12 @@ allprojects {
 
 ![演示gif](https://github.com/superSp/RulerView/blob/master/RulerViewGif.gif)
 
+![演示gif2](https://github.com/superSp/RulerView/blob/master/RulerViewGif2.gif)
+
+
 # 支持设置的属性
 ````
+<attr name="scaleLimit" format="integer" />                  <!--相邻2个刻度之间的数量-->
 <attr name="rulerHeight" format="dimension" />               <!--尺子的高度-->
 <attr name="rulerToResultgap" format="dimension" />          <!--尺子距离结果的高度-->
 <attr name="scaleGap" format="dimension" />                  <!--刻度间距-->
