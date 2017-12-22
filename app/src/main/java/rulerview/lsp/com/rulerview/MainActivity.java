@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import com.lsp.RulerView;
 
+
 public class MainActivity extends AppCompatActivity {
     private RulerView rulerView;
 

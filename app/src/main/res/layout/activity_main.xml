@@ -26,19 +26,19 @@
             android:text="目的刻度" />
     </LinearLayout>
 
-
     <com.lsp.RulerView
         android:id="@+id/rulerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        lsp:scaleLimit="10"
         lsp:bgColor="#fcfffc"
-        lsp:firstScale="520"
+        lsp:firstScale="5"
         lsp:isBgRoundRect="true"
         lsp:largeScaleColor="#50b586"
         lsp:largeScaleStroke="5dp"
         lsp:minScale="-100"
-        lsp:maxScale="1000"
+        lsp:maxScale="100"
         lsp:midScaleColor="#999999"
         lsp:midScaleStroke="3dp"
         lsp:resultNumColor="#50b586"

@@ -25,6 +25,8 @@
         <attr name="unitTextSize" format="dimension" />              <!--单位字体大小-->
         <attr name="showScaleResult" format="boolean" />             <!--是否显示结果值-->
         <attr name="isBgRoundRect" format="boolean" />               <!--背景是否圆角-->
+        <attr name="scaleLimit" format="integer" />                <!--相邻2个刻度之间的数量-->
+
     </declare-styleable>
 
 </resources>

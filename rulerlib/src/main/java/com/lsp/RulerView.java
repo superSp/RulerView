@@ -32,9 +32,14 @@ import java.math.BigDecimal;
 public class RulerView extends View {
     private static final String TAG = "RulerView";
     /**
+     * 2个大刻度之间间距，默认为1
+     */
+    private int scaleLimit = 1;
+    /**
      * 尺子高度
      */
     private int rulerHeight = 50;
+
     /**
      * 尺子和屏幕顶部以及结果之间的高度
      */
@@ -137,6 +142,7 @@ public class RulerView extends View {
      * 当前刻度
      */
     public float currentScale = firstScale;
+
     private ValueAnimator valueAnimator;
     private VelocityTracker velocityTracker = VelocityTracker.obtain();
     private String resultText = String.valueOf(firstScale);
@@ -188,6 +194,8 @@ public class RulerView extends View {
 
         TypedArray a = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.RulerView, defStyleAttr, 0);
 
+        scaleLimit =  a.getInt(R.styleable.RulerView_scaleLimit, scaleLimit);
+
         rulerHeight = a.getDimensionPixelSize(R.styleable.RulerView_rulerHeight, (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, rulerHeight, getResources().getDisplayMetrics()));
 
@@ -199,11 +207,11 @@ public class RulerView extends View {
         scaleGap = a.getDimensionPixelSize(R.styleable.RulerView_scaleGap, (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, scaleGap, getResources().getDisplayMetrics()));
 
-        minScale = a.getInt(R.styleable.RulerView_minScale, minScale);
+        minScale = a.getInt(R.styleable.RulerView_minScale, minScale)/scaleLimit;
 
-        firstScale = a.getFloat(R.styleable.RulerView_firstScale, firstScale);
+        firstScale = a.getFloat(R.styleable.RulerView_firstScale, firstScale)/scaleLimit;
 
-        maxScale = a.getInt(R.styleable.RulerView_maxScale, maxScale);
+        maxScale = a.getInt(R.styleable.RulerView_maxScale, maxScale)/scaleLimit;
 
         bgColor = a.getColor(R.styleable.RulerView_bgColor, bgColor);
 
@@ -493,7 +501,8 @@ public class RulerView extends View {
         canvas.translate(num2, 0);    //不加该偏移的话，滑动时刻度不会落在0~1之间只会落在整数上面,其实这个都能设置一种模式了，毕竟初衷就是指针不会落在小数上面
 
         //这里是滑动时候不断回调给使用者的结果值
-        currentScale = new WeakReference<>(new BigDecimal((width / 2 - moveX) / (scaleGap * scaleCount)+minScale)).get().setScale(1, BigDecimal.ROUND_HALF_UP).floatValue() ;
+        currentScale = new WeakReference<>(new BigDecimal(((width / 2 - moveX) / (scaleGap * scaleCount)+minScale)*scaleLimit)).get().setScale(1, BigDecimal.ROUND_HALF_UP).floatValue() ;
+
         resultText = String.valueOf(currentScale);
 
 
@@ -509,8 +518,9 @@ public class RulerView extends View {
                     //绘制刻度，绘制刻度数字
                     canvas.drawLine(0, 0, 0, midScaleHeight, midScalePaint);
                     scaleNumPaint.getTextBounds(num1 / scaleGap + minScale + "", 0, (num1 / scaleGap + minScale + "").length(), scaleNumRect);
-                    canvas.drawText(num1 / scaleCount + minScale + "", -scaleNumRect.width() / 2, lagScaleHeight +
+                    canvas.drawText((num1 / scaleCount + minScale)*scaleLimit + "", -scaleNumRect.width() / 2, lagScaleHeight +
                             (rulerHeight - lagScaleHeight) / 2 + scaleNumRect.height(), scaleNumPaint);
+
                 }
 
             } else {   //绘制小数刻度
@@ -555,7 +565,7 @@ public class RulerView extends View {
     }
 
     public void computeScrollTo(float scale) {
-
+        scale = scale/scaleLimit;
         if (scale < minScale || scale > maxScale) {
             return;
         }
@@ -682,6 +692,11 @@ public class RulerView extends View {
 
     public void setIsBgRoundRect(boolean bgRoundRect) {
         isBgRoundRect = bgRoundRect;
+        invalidate();
+    }
+
+    public void setScaleLimit(int scaleLimit) {
+        this.scaleLimit = scaleLimit;
         invalidate();
     }
 }
