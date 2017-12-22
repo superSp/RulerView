@@ -23,8 +23,10 @@ allprojects {
 
 ![演示gif2](https://github.com/superSp/RulerView/blob/master/RulerViewGif2.gif)
 
+
 # 支持设置的属性
 ````
+<attr name="scaleLimit" format="integer" />                  <!--相邻2个刻度之间的数量-->
 <attr name="rulerHeight" format="dimension" />               <!--尺子的高度-->
 <attr name="rulerToResultgap" format="dimension" />          <!--尺子距离结果的高度-->
 <attr name="scaleGap" format="dimension" />                  <!--刻度间距-->
