@@ -26,11 +26,11 @@ allprojects {
 
 # 支持设置的属性
 ````
-<attr name="scaleLimit" format="integer" />                  <!--相邻2个刻度之间的数量-->
+<attr name="scaleCount" format="integer" />                  <!--相邻2个大刻度之间小刻度的数目-->
+<attr name="scaleLimit" format="integer" />                  <!--相邻2个大刻度之间的差值默认为1-->
 <attr name="rulerHeight" format="dimension" />               <!--尺子的高度-->
 <attr name="rulerToResultgap" format="dimension" />          <!--尺子距离结果的高度-->
 <attr name="scaleGap" format="dimension" />                  <!--刻度间距-->
-<attr name="scaleCount" format="integer" />                  <!--刻度数-->
 <attr name="firstScale" format="float" />                    <!--默认选中的刻度-->
 <attr name="maxScale" format="integer" />                    <!--最大刻度-->
 <attr name="minScale" format="integer" />                    <!--最小刻度-->
