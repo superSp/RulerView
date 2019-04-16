@@ -317,9 +317,9 @@ public class RulerView extends View {
 
         switch (heightModule) {
             case MeasureSpec.AT_MOST:
+            case MeasureSpec.UNSPECIFIED:
                 height = rulerHeight + (showScaleResult ? resultNumRect.height() : 0) + rulerToResultgap * 2 + getPaddingTop() + getPaddingBottom();
                 break;
-            case MeasureSpec.UNSPECIFIED:
             case MeasureSpec.EXACTLY:
                 height = heightSize + getPaddingTop() + getPaddingBottom();
                 break;
