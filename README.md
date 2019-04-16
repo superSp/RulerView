@@ -12,7 +12,7 @@ allprojects {
 ````
 >在module的build.gradle中添加
 
-`implementation 'com.github.superSp:RulerView:v1.4'`
+`implementation 'com.github.superSp:RulerView:v1.5'`
 
 # 实现思路以及流程
 [我的简书地址](http://www.jianshu.com/p/baf143364e04)
