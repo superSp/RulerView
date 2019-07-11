@@ -14,6 +14,39 @@ allprojects {
 
 `implementation 'com.github.superSp:RulerView:v1.5'`
 
+# 示例
+````
+<com.lsp.RulerView
+        android:id="@+id/rulerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        lsp:scaleLimit="10"
+        lsp:bgColor="#fcfffc"
+        lsp:firstScale="5"
+        lsp:isBgRoundRect="true"
+        lsp:largeScaleColor="#50b586"
+        lsp:largeScaleStroke="5dp"
+        lsp:minScale="-100"
+        lsp:maxScale="100"
+        lsp:midScaleColor="#999999"
+        lsp:midScaleStroke="3dp"
+        lsp:resultNumColor="#50b586"
+        lsp:resultNumTextSize="20sp"
+        lsp:rulerHeight="50dp"
+        lsp:rulerToResultgap="30dp"
+        lsp:scaleCount="10"
+        lsp:scaleGap="10dp"
+        lsp:scaleNumColor="#666666"
+        lsp:scaleNumTextSize="16sp"
+        lsp:showScaleResult="true"
+        lsp:smallScaleColor="#aaaaaa"
+        lsp:smallScaleStroke="2dp"
+        lsp:unit="kg"
+        lsp:unitColor="#50b586"
+        lsp:unitTextSize="10sp" />
+````
+
 # 实现思路以及流程
 [我的简书地址](http://www.jianshu.com/p/baf143364e04)
 
